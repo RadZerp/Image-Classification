@@ -1,33 +1,40 @@
 from sklearn import datasets
+import numpy as np
 from keras.utils import np_utils
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import random
 
-def prepareData():
-    iris = datasets.load_iris()
-    data = iris.data
-    labels = iris.target
-    
-    
+def prepareData(data, labels): 
     X_train, X_test, y_train, y_test = train_test_split(data, labels, train_size = 0.7, random_state = random.seed(100))
-    y_train = np_utils.to_categorical(y_train, num_classes = 3)
-    y_test = np_utils.to_categorical(y_test, num_classes = 3)
+    #num_classes = len(np.unique(labels))
+    #y_train = np_utils.to_categorical(y_train, num_classes)
+    #y_test = np_utils.to_categorical(y_test, num_classes)
+    X_train = np.array(X_train)
+    X_test = np.array(X_test)
+    y_train = np.array(y_train)
+    y_test = np.array(y_test)
+    print(X_test.shape)
+
     return X_train, X_test, y_train, y_test
 
 
 from keras.models import Sequential
+from keras.layers.convolutional import *
+from keras.layers.pooling import *
 from keras.layers.core import Dense, Flatten, Dropout
 
 def defineModel():
 # Tinter with model
     model = Sequential()
-    model.add(Dense(50, input_dim = 4, activation = 'relu'))
-    model.add(Dense(100, activation = 'relu'))
-    model.add(Dense(100, activation = 'relu'))
-    model.add(Dropout(0.2))
-    model.add(Dense(3, activation = 'softmax'))
+    model.add(Dense(5, input_shape = (None, None, 3), activation = 'relu'))
+    model.add(Conv2D(3, kernel_size = (3, 3), activation = 'tanh', padding = 'valid'))# 1.1 NO 2D ONLY DENSE!
+    model.add(Dropout(0.1))
+    model.add(Flatten())
     model.compile(loss = 'categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
+    
+    model.summary()
+
     return model
 
 def plot(results):
