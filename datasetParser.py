@@ -1,6 +1,7 @@
 import zipfile
-from os import path, remove
+from os import path, remove, listdir
 import requests
+import cv2
 
 def initilizeDataset():
     if (path.exists("./dataset") == False):
@@ -14,3 +15,18 @@ def initilizeDataset():
         print("Deleting temporary files...")
         remove('compressedData.zip')
     print("Dataset is initializied")
+
+def parseDataset():
+    images = []
+    segmentations = []
+    labels = []
+    print("Parsing dataset...")
+    for filename in listdir("dataset/leedsbutterfly/images"):
+        img = cv2.imread(path.join("dataset/leedsbutterfly/images", filename))
+        seg = cv2.imread(path.join("dataset/leedsbutterfly/segmentations", filename[:-4] + "_seg0.png"))
+        if img is not None:
+            images.append(img)
+            segmentations.append(seg)
+            labels.append(int(filename[:3]))
+    print("Dataset is parsed")
+    return images, segmentations, labels
