@@ -1,4 +1,3 @@
-from sklearn import datasets
 import numpy as np
 from keras.utils import np_utils
 from sklearn.model_selection import train_test_split
