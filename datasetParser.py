@@ -4,6 +4,7 @@ import requests
 import cv2
 
 def initilizeDataset():
+    print("initializing dataset...")
     if (path.exists("./dataset") == False):
         print("Requesting compressed data, this might take a while...")
         url = 'http://www.josiahwang.com/dataset/leedsbutterfly/leedsbutterfly_dataset_v1.0.zip'
