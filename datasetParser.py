@@ -3,7 +3,7 @@ from os import path, remove, listdir
 import requests
 import cv2
 import numpy as np
-from skimage import io,transform
+from skimage import transform
 
 def initilizeDataset():
     print("Initializing dataset...")
@@ -26,19 +26,18 @@ def parseDataset():
     print("Parsing dataset...")
     for filename in listdir("dataset/leedsbutterfly/images"):
         img = cv2.imread(path.join("dataset/leedsbutterfly/images", filename))
-        img = np.array(transform.resize(img,(50,50),mode="constant"))
         mask = cv2.imread(path.join("dataset/leedsbutterfly/segmentations", filename[:-4] + "_seg0.png"), 0)
-        mask = np.array(transform.resize(mask,(50,50),mode="constant"))
         if img is not None:
-            images.append(img)
+            images.append(img[:,:,::-1])
             masks.append(mask)
             labels.append(int(filename[:3]))
     print("Dataset is parsed")
-    return np.array(images), np.array(masks), np.array(labels)
+    return images, masks, np.array(labels)
 
 def segmentData(images, masks):
     print("Segmenting data...")
     for image in range(len(images)):
         images[image] = cv2.bitwise_and(images[image], images[image], mask = masks[image])
+        images[image] = np.array(transform.resize(images[image], (200, 200), mode = "constant"))
     print("Segmented " + str(len(images)) + " images")
-    return images
+    return np.array(images)

@@ -1,8 +1,4 @@
 import numpy as np
-import pandas as pd
-from keras.utils import np_utils
-import tensorflow as tf
-import tensorflow.keras.backend as K
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import random
@@ -22,10 +18,10 @@ from keras.layers.core import *
 def defineModel():
 # Tinter with model
     model = Sequential()
-    model.add(Dense(5, input_shape = (50, 50, 3), activation = 'relu'))
+    model.add(Dense(5, input_shape = (200, 200, 3), activation = 'relu'))
     model.add(Conv2D(3, kernel_size = (3, 3), activation = 'tanh', padding = 'valid'))# 1.1 NO 2D ONLY DENSE!
     model.add(Dropout(0.1))
-    model.add(GlobalMaxPooling2D())
+    model.add(Flatten())
     model.add(Dense(11, activation='relu'))
     model.compile(loss = 'sparse_categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
     
