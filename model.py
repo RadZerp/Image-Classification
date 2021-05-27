@@ -1,21 +1,17 @@
 import numpy as np
 import pandas as pd
 from keras.utils import np_utils
+import tensorflow as tf
 import tensorflow.keras.backend as K
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import random
 
-def prepareData(data, labels): 
-    df = pd.DataFrame()
-    df.insert(0, "labels", labels)
-    df.insert(0, "data", data)
-    (train, test) = train_test_split(df, train_size = 0.7, random_state = random.seed(100))
-    #num_classes = len(np.unique(labels))
-    #y_train = np_utils.to_categorical(y_train, num_classes)
-    #y_test = np_utils.to_categorical(y_test, num_classes)
-
-    return (train, test)
+def prepareData(data, labels):
+    #labels = tf.convert_to_tensor(labels)
+    X_train, X_test, y_train, y_test = train_test_split(data, labels, train_size = 0.7, random_state = random.seed(100))
+    
+    return X_train, X_test, y_train, y_test
 
 
 from keras.models import Sequential
@@ -26,11 +22,12 @@ from keras.layers.core import *
 def defineModel():
 # Tinter with model
     model = Sequential()
-    model.add(Dense(5, input_shape = (None, None, 3), activation = 'relu'))
+    model.add(Dense(5, input_shape = (50, 50, 3), activation = 'relu'))
     model.add(Conv2D(3, kernel_size = (3, 3), activation = 'tanh', padding = 'valid'))# 1.1 NO 2D ONLY DENSE!
     model.add(Dropout(0.1))
-    model.add(Flatten())
-    model.compile(loss = 'categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
+    model.add(GlobalMaxPooling2D())
+    model.add(Dense(11, activation='relu'))
+    model.compile(loss = 'sparse_categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
     
     model.summary()
 
@@ -66,7 +63,7 @@ def plot(results):
 def numpyfy(df):
     arr = []
     df_numpy = df.to_numpy()
-    print(df_numpy[:2])
+    # print(df_numpy[:2])
     for i in df_numpy:
         arr.append(i)
     arr = np.asarray(arr)
