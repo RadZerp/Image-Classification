@@ -3,6 +3,7 @@ from os import path, remove, listdir
 import requests
 import cv2
 from matplotlib import pyplot as plt
+import pandas as pd
 
 def initilizeDataset():
     print("Initializing dataset...")

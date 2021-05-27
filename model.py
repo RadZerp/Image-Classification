@@ -1,28 +1,28 @@
 from sklearn import datasets
 import numpy as np
+import pandas as pd
 from keras.utils import np_utils
+import tensorflow.keras.backend as K
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import random
 
 def prepareData(data, labels): 
-    X_train, X_test, y_train, y_test = train_test_split(data, labels, train_size = 0.7, random_state = random.seed(100))
+    df = pd.DataFrame()
+    df.insert(0, "labels", labels)
+    df.insert(0, "data", data)
+    (train, test) = train_test_split(df, train_size = 0.7, random_state = random.seed(100))
     #num_classes = len(np.unique(labels))
     #y_train = np_utils.to_categorical(y_train, num_classes)
     #y_test = np_utils.to_categorical(y_test, num_classes)
-    X_train = np.array(X_train)
-    X_test = np.array(X_test)
-    y_train = np.array(y_train)
-    y_test = np.array(y_test)
-    print(X_test.shape)
 
-    return X_train, X_test, y_train, y_test
+    return (train, test)
 
 
 from keras.models import Sequential
 from keras.layers.convolutional import *
 from keras.layers.pooling import *
-from keras.layers.core import Dense, Flatten, Dropout
+from keras.layers.core import *
 
 def defineModel():
 # Tinter with model
@@ -36,6 +36,17 @@ def defineModel():
     model.summary()
 
     return model
+    # input1 = Dense(5, input_shape = (None, None, 3), activation = 'relu')
+    # conv1 = Conv2D(32, (3, 3), input_shape=(3, None, None), activation="relu")(inpu1)
+    # pool1 = MaxPooling2D(pool_size=(2, 2))(conv1)
+    # conv2 = Conv2D(32, (3, 3), activation="relu")(pool1)
+    # pool2 = MaxPooling2D(pool_size=(2, 2))(conv2)
+    # flat1 = Flatten()(pool2)
+    # dense1 = Dense(16, activation="relu")(flat1)
+    # dense2 = Dense(1, activation="sigmoid")(dense1)
+    # model = Model(inputs=input1, outputs=dense2)
+    # model.compile(loss='mse', optimizer='adadelta', metrics=['mse', 'mae'])
+    # return model
 
 def plot(results):
     plt.clf()
@@ -52,3 +63,13 @@ def plot(results):
     plt.show()
     
     
+# numpy array combining
+def numpyfy(df):
+    arr = []
+    df_numpy = df.to_numpy()
+    print(df_numpy[:2])
+    for i in df_numpy:
+        arr.append(i)
+    arr = np.asarray(arr)
+    #print(arr.shape), returns 4 dimensional array
+    return arr
