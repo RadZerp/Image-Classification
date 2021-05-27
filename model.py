@@ -1,4 +1,3 @@
-from sklearn import datasets
 import numpy as np
 import pandas as pd
 from keras.utils import np_utils

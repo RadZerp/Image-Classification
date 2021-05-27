@@ -2,8 +2,6 @@ import zipfile
 from os import path, remove, listdir
 import requests
 import cv2
-from matplotlib import pyplot as plt
-import pandas as pd
 
 def initilizeDataset():
     print("Initializing dataset...")
@@ -28,7 +26,7 @@ def parseDataset():
         img = cv2.imread(path.join("dataset/leedsbutterfly/images", filename))
         mask = cv2.imread(path.join("dataset/leedsbutterfly/segmentations", filename[:-4] + "_seg0.png"), 0)
         if img is not None:
-            images.append(img[:,:,::-1])
+            images.append(img[...,::-1])
             masks.append(mask)
             labels.append(int(filename[:3]))
     print("Dataset is parsed")
