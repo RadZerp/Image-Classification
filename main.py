@@ -24,4 +24,4 @@ Y_pred = model.predict(X_test)
 Y_pred = np.argmax(Y_pred, axis = 1)
 target_names = ["1","2","3","4","5","6","7","8","9","10"]
 print(confusion_matrix(y_test, Y_pred))
-print(classification_report(y_test, Y_pred, target_names = target_names))
+print(classification_report(y_test, Y_pred, target_names = target_names, zero_division = 1))
