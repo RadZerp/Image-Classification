@@ -18,7 +18,7 @@ from tensorflow.keras import regularizers
 
 def defineModel():
     model = Sequential([
-        Dense(16, input_shape = (200, 200, 3), activation = 'relu', kernel_regularizer = regularizers.l1(0.01)),
+        Dense(16, input_shape = (50, 50, 3), activation = 'relu', kernel_regularizer = regularizers.l1(0.01)),
         Dropout(0.02),
         Conv2D(32, kernel_size = (3, 3), activation = 'tanh', padding = 'valid'),
         Dropout(0.02),

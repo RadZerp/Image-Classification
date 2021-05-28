@@ -38,7 +38,7 @@ def segmentData(images, masks):
     print("Segmenting data...")
     for image in range(len(images)):
         images[image] = cv2.bitwise_and(images[image], images[image], mask = masks[image])
-        images[image] = np.array(transform.resize(images[image], (200, 200), mode = "constant"))
+        images[image] = np.array(transform.resize(images[image], (50, 50), mode = "constant"))
     print("\tSegmented " + str(len(images)) + " images")
     return np.array(images)
 
