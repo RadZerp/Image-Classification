@@ -1,8 +1,9 @@
 from datasetParser import initilizeDataset, parseDataset, segmentData, datasetIsCached, cacheDataset, loadCachedDataset
-from matplotlib import pyplot as plt
 from model import prepareData, defineModel, plot
-import numpy as np
 from sklearn.metrics import confusion_matrix, classification_report
+from matplotlib import pyplot as plt
+import numpy as np
+import tensorflow as tf
 
 #get dataset
 
@@ -19,7 +20,14 @@ else:
 
 X_train, X_test, y_train, y_test = prepareData(data, labels)
 model = defineModel()
-results = model.fit(X_train, y_train, validation_data = (X_test, y_test), batch_size = 128, epochs = 10, verbose = 1)
+results = model.fit(
+    X_train, 
+    y_train, 
+    validation_data = (X_test, y_test), 
+    batch_size = 256, 
+    epochs = 25, 
+    verbose = 1
+)
 model.evaluate(X_test, y_test)
 plot(results)
 

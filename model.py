@@ -16,15 +16,39 @@ def prepareData(data, labels):
 
 def defineModel():
     model = Sequential([
-        Dense(16, input_shape = (50, 50, 3), activation = 'relu', kernel_regularizer = regularizers.l1(0.001)),
-        Dropout(0.02),
-        Conv2D(32, kernel_size = (3, 3), activation = 'tanh', padding = 'valid'),
-        Dropout(0.02),
-        Conv2D(32, kernel_size = (3, 3), activation = 'tanh', padding = 'valid'),
+        #https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html
+        
+        Conv2D(32, (3, 3), input_shape = (100, 100, 3), activation = 'relu'),
+        MaxPooling2D(pool_size = (2, 2)),
+        
+        Conv2D(32, (3, 3), activation = 'relu'),
+        MaxPooling2D(pool_size = (2, 2)),
+        
+        Conv2D(64, (3, 3), activation = 'relu'),
+        MaxPooling2D(pool_size = (2, 2)),
+        
         Flatten(),
-        Dense(10, activation = 'relu')
+        Dense(64, activation = 'relu'),
+        Dropout(0.5),
+        Dense(10),
+        Activation('sigmoid')
+
+        # Flatten(input_shape = (50, 50, 3)),
+        # Dense(256, activation = 'relu'),
+        # Dropout(0.5),
+        # Dense(128, activation = 'relu'),
+        # Dropout(0.5),
+        # Dense(10, activation = 'sigmoid')
+
+        #Dense(16, input_shape = (50, 50, 3), activation = 'relu', kernel_regularizer = regularizers.l1(0.01)),
+        #Conv2D(32, kernel_size = (1, 1), activation = 'tanh', padding = 'valid'),
+        #MaxPooling2D(pool_size = (3, 3)),
+        #Conv2D(32, kernel_size = (2, 2), activation = 'tanh', padding = 'valid'),
+        #MaxPooling2D(pool_size = (3, 3)),
+        #Flatten(),
+        #Dense(10, activation = 'relu')
     ])
-    opt = keras.optimizers.Adam(learning_rate=0.01)
+    opt = keras.optimizers.Adam(learning_rate = 0.01)
     model.compile(
         loss = 'categorical_crossentropy', 
         optimizer = opt, 
