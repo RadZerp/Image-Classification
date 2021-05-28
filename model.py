@@ -17,30 +17,21 @@ from keras.layers.core import *
 from tensorflow.keras import regularizers
 
 def defineModel():
-    # model = Sequential([
-    #     Dense(16, input_shape = (200, 200, 3), activation = 'relu', kernel_regularizer = regularizers.l1(0.01)),
-    #     Dropout(0.02),
-    #     Conv2D(32, kernel_size = (3, 3), activation = 'tanh', padding = 'valid'),
-    #     Dropout(0.02),
-    #     Conv2D(32, kernel_size = (3, 3), activation = 'tanh', padding = 'valid'),
-    #     Flatten(),
-    #     Dense(11, activation = 'relu')
-    # ])
-    # model.compile(
-    #     loss = 'categorical_crossentropy', 
-    #     optimizer = 'adam', 
-    #     metrics = ['accuracy']
-    # )
-    model = Sequential()
-    model.add(Dense(5, input_shape = (200, 200, 3), activation = 'relu'))
-    model.add(Conv2D(3, kernel_size = (3, 3), activation = 'tanh', padding = 'valid'))# 1.1 NO 2D ONLY DENSE!
-    model.add(Dropout(0.1))
-    model.add(Flatten())
-    model.add(Dense(11, activation='relu'))
-    model.compile(loss = 'sparse_categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
-    
+    model = Sequential([
+        Dense(16, input_shape = (200, 200, 3), activation = 'relu', kernel_regularizer = regularizers.l1(0.01)),
+        Dropout(0.02),
+        Conv2D(32, kernel_size = (3, 3), activation = 'tanh', padding = 'valid'),
+        Dropout(0.02),
+        Conv2D(32, kernel_size = (3, 3), activation = 'tanh', padding = 'valid'),
+        Flatten(),
+        Dense(11, activation = 'relu')
+    ])
+    model.compile(
+        loss = 'sparse_categorical_crossentropy', 
+        optimizer = 'adam', 
+        metrics = ['accuracy']
+    )
     model.summary()
-
     return model
     # input1 = Dense(5, input_shape = (None, None, 3), activation = 'relu')
     # conv1 = Conv2D(32, (3, 3), input_shape=(3, None, None), activation="relu")(inpu1)
@@ -52,7 +43,6 @@ def defineModel():
     # dense2 = Dense(1, activation="sigmoid")(dense1)
     # model = Model(inputs=input1, outputs=dense2)
     # model.compile(loss='mse', optimizer='adadelta', metrics=['mse', 'mae'])
-    # return model
 
 def plot(results):
     plt.clf()
