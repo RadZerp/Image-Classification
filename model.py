@@ -1,34 +1,33 @@
-import numpy as np
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
-import random
-
-def prepareData(data, labels):
-    #labels = tf.convert_to_tensor(labels)
-    X_train, X_test, y_train, y_test = train_test_split(data, labels, train_size = 0.7, random_state = random.seed(100))
-    
-    return X_train, X_test, y_train, y_test
-
-
+from keras.utils import np_utils
 from keras.models import Sequential
+from tensorflow import keras
 from keras.layers.convolutional import *
 from keras.layers.pooling import *
 from keras.layers.core import *
 from tensorflow.keras import regularizers
 
+def prepareData(data, labels):
+    X_train, X_test, y_train, y_test = train_test_split(data, labels, train_size = 0.7)
+    y_train = np_utils.to_categorical(y_train, num_classes = 10)
+    y_test = np_utils.to_categorical(y_test, num_classes = 10)
+    return X_train, X_test, y_train, y_test
+
 def defineModel():
     model = Sequential([
-        Dense(16, input_shape = (50, 50, 3), activation = 'relu', kernel_regularizer = regularizers.l1(0.01)),
+        Dense(16, input_shape = (50, 50, 3), activation = 'relu', kernel_regularizer = regularizers.l1(0.001)),
         Dropout(0.02),
         Conv2D(32, kernel_size = (3, 3), activation = 'tanh', padding = 'valid'),
         Dropout(0.02),
         Conv2D(32, kernel_size = (3, 3), activation = 'tanh', padding = 'valid'),
         Flatten(),
-        Dense(11, activation = 'relu')
+        Dense(10, activation = 'relu')
     ])
+    opt = keras.optimizers.Adam(learning_rate=0.01)
     model.compile(
-        loss = 'sparse_categorical_crossentropy', 
-        optimizer = 'adam', 
+        loss = 'categorical_crossentropy', 
+        optimizer = opt, 
         metrics = ['accuracy']
     )
     model.summary()
@@ -57,15 +56,3 @@ def plot(results):
     plt.ylabel('Loss')
     plt.legend()
     plt.show()
-    
-    
-# numpy array combining
-def numpyfy(df):
-    arr = []
-    df_numpy = df.to_numpy()
-    # print(df_numpy[:2])
-    for i in df_numpy:
-        arr.append(i)
-    arr = np.asarray(arr)
-    #print(arr.shape), returns 4 dimensional array
-    return arr
