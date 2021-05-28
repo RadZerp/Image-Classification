@@ -14,9 +14,23 @@ from keras.models import Sequential
 from keras.layers.convolutional import *
 from keras.layers.pooling import *
 from keras.layers.core import *
+from tensorflow.keras import regularizers
 
 def defineModel():
-# Tinter with model
+    # model = Sequential([
+    #     Dense(16, input_shape = (200, 200, 3), activation = 'relu', kernel_regularizer = regularizers.l1(0.01)),
+    #     Dropout(0.02),
+    #     Conv2D(32, kernel_size = (3, 3), activation = 'tanh', padding = 'valid'),
+    #     Dropout(0.02),
+    #     Conv2D(32, kernel_size = (3, 3), activation = 'tanh', padding = 'valid'),
+    #     Flatten(),
+    #     Dense(11, activation = 'relu')
+    # ])
+    # model.compile(
+    #     loss = 'categorical_crossentropy', 
+    #     optimizer = 'adam', 
+    #     metrics = ['accuracy']
+    # )
     model = Sequential()
     model.add(Dense(5, input_shape = (200, 200, 3), activation = 'relu'))
     model.add(Conv2D(3, kernel_size = (3, 3), activation = 'tanh', padding = 'valid'))# 1.1 NO 2D ONLY DENSE!
