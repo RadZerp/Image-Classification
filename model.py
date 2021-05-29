@@ -6,10 +6,9 @@ from tensorflow import keras
 from keras.layers.convolutional import *
 from keras.layers.pooling import *
 from keras.layers.core import *
-from tensorflow.keras import regularizers
 
 def prepareData(data, labels):
-    X_train, X_test, y_train, y_test = train_test_split(data, labels, train_size = 0.7)
+    X_train, X_test, y_train, y_test = train_test_split(data, labels, train_size = 0.70)
     y_train = np_utils.to_categorical(y_train, num_classes = 10)
     y_test = np_utils.to_categorical(y_test, num_classes = 10)
     return X_train, X_test, y_train, y_test
@@ -53,7 +52,6 @@ def defineModel():
         optimizer = opt, 
         metrics = ['accuracy']
     )
-    model.summary()
     return model
     # input1 = Dense(5, input_shape = (None, None, 3), activation = 'relu')
     # conv1 = Conv2D(32, (3, 3), input_shape=(3, None, None), activation="relu")(inpu1)
@@ -83,14 +81,9 @@ def plot(results):
     ax1.plot(epochs, val_loss_values, 'b', label = 'Validation loss')
     
     ax2 = ax1.twinx()
-    
     ax2.set_ylabel('Accuracy')
     ax2.plot(epochs, val_accuracy, 'b', label = 'Validation accuracy', c = 'red')
     plt.title('Training/validation loss and accuracy')
-    #plt.xlabel('Epochs')
-    #plt.ylabel('Loss')
-    
     
     fig.tight_layout()
-    plt.legend()
     plt.show()
