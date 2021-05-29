@@ -9,7 +9,7 @@ from keras.layers.core import *
 from tensorflow.keras import regularizers
 
 def prepareData(data, labels):
-    X_train, X_test, y_train, y_test = train_test_split(data, labels, train_size = 0.6)
+    X_train, X_test, y_train, y_test = train_test_split(data, labels, train_size = 0.7)
     y_train = np_utils.to_categorical(y_train, num_classes = 10)
     y_test = np_utils.to_categorical(y_test, num_classes = 10)
     return X_train, X_test, y_train, y_test
@@ -18,17 +18,17 @@ def defineModel():
     model = Sequential([
         #https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html
         
-        Conv2D(32, (3, 3), input_shape = (100, 100, 3), activation = 'relu'),
+        Conv2D(44, (3, 3), input_shape = (100, 100, 3), activation = 'relu'),
         MaxPooling2D(pool_size = (2, 2)),
         
-        Conv2D(32, (3, 3), activation = 'relu'),
+        Conv2D(44, (3, 3), activation = 'relu'),
         MaxPooling2D(pool_size = (2, 2)),
         
-        Conv2D(64, (3, 3), activation = 'relu'),
+        Conv2D(88, (3, 3), activation = 'relu'),
         MaxPooling2D(pool_size = (2, 2)),
         
         Flatten(),
-        Dense(64, activation = 'relu'),
+        Dense(88, activation = 'relu'),
         Dropout(0.5),
         Dense(10, activation = 'sigmoid')
 
@@ -66,6 +66,8 @@ def defineModel():
     # model = Model(inputs=input1, outputs=dense2)
     # model.compile(loss='mse', optimizer='adadelta', metrics=['mse', 'mae'])
 
+# Checked matplotlib for how to create two-axis graphs:
+# https://matplotlib.org/stable/gallery/subplots_axes_and_figures/two_scales.html
 def plot(results):
     plt.clf()
     history_dict = results.history
