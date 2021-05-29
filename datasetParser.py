@@ -6,7 +6,6 @@ from os import path, remove, listdir
 from requests import get
 from cv2 import imread, bitwise_and
 import numpy as np
-from skimage import transform
 
 def initilizeDataset():
     print("Initializing dataset...")
@@ -41,9 +40,8 @@ def segmentData(images, masks):
     print("Segmenting data...")
     for image in range(len(images)):
         images[image] = bitwise_and(images[image], images[image], mask = masks[image])
-        images[image] = np.array(transform.resize(images[image], (IMAGE_SIZE, IMAGE_SIZE), mode = "constant"))
     print("\tSegmented " + str(len(images)) + " images")
-    return np.array(images)
+    return images
 
 def datasetIsCached():
     print("Checking if dataset is cached...")

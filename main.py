@@ -1,7 +1,7 @@
 # import local modules
 from datasetParser import initilizeDataset, parseDataset, segmentData, datasetIsCached, cacheDataset, loadCachedDataset, verifyCachedDataset
 from model import prepareData, plot, defineModel, defineGrayscaleModel, calculateCrossValidation, trainModel, predictModel, generateModelDiagram
-from preprocessing import grayscaleConverter
+from preprocessing import grayscaleConverter, resizeImages
 # import foreign modules
 from tensorflow import get_logger
 from logging import ERROR
@@ -21,7 +21,9 @@ else:
     # parse dataset to numpy arrays
     images, masks, labels = parseDataset()
     # segment images
-    data = segmentData(images, masks)
+    images = segmentData(images, masks)
+    # resize images
+    data = resizeImages(images)
     # cache dataset to reduce loadtime for next runtime
     cacheDataset(data, labels)
 # convert images to grayscale
