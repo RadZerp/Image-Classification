@@ -1,7 +1,10 @@
-import zipfile
+# import local modules
+from dictionary import IMAGE_SIZE
+# import foreign modules
+from zipfile import ZipFile
 from os import path, remove, listdir
-import requests
-import cv2
+from requests import get
+from cv2 import imread, bitwise_and
 import numpy as np
 from skimage import transform
 
@@ -10,11 +13,11 @@ def initilizeDataset():
     if (path.exists("./dataset/leedsbutterfly") == False):
         print("\tRequesting compressed data, this might take a while...")
         url = 'http://www.josiahwang.com/dataset/leedsbutterfly/leedsbutterfly_dataset_v1.0.zip'
-        r = requests.get(url, allow_redirects=True)
+        r = get(url, allow_redirects = True)
         open('compressedData.zip', 'wb').write(r.content)
         print("\tUncompressing data...")
-        with zipfile.ZipFile("compressedData.zip", 'r') as zip_ref:
-            zip_ref.extractall("./dataset")
+        with ZipFile("compressedData.zip", 'r') as file:
+            file.extractall("./dataset")
         print("\tDeleting temporary files...")
         remove('compressedData.zip')
     print("\tDataset is initializied")
@@ -25,8 +28,8 @@ def parseDataset():
     labels = []
     print("Parsing dataset...")
     for filename in listdir("dataset/leedsbutterfly/images"):
-        img = cv2.imread(path.join("dataset/leedsbutterfly/images", filename))
-        mask = cv2.imread(path.join("dataset/leedsbutterfly/segmentations", filename[:-4] + "_seg0.png"), 0)
+        img = imread(path.join("dataset/leedsbutterfly/images", filename))
+        mask = imread(path.join("dataset/leedsbutterfly/segmentations", filename[:-4] + "_seg0.png"), 0)
         if img is not None and mask is not None:
             images.append(img[:,:,::-1])
             masks.append(mask)
@@ -34,11 +37,11 @@ def parseDataset():
     print("\tDataset is parsed")
     return images, masks, np.array(labels)
 
-def segmentData(images, masks, imageSize):
+def segmentData(images, masks):
     print("Segmenting data...")
     for image in range(len(images)):
-        images[image] = cv2.bitwise_and(images[image], images[image], mask = masks[image])
-        images[image] = np.array(transform.resize(images[image], (imageSize, imageSize), mode = "constant"))
+        images[image] = bitwise_and(images[image], images[image], mask = masks[image])
+        images[image] = np.array(transform.resize(images[image], (IMAGE_SIZE, IMAGE_SIZE), mode = "constant"))
     print("\tSegmented " + str(len(images)) + " images")
     return np.array(images)
 
@@ -64,10 +67,10 @@ def loadCachedDataset():
     print("\tDataset is loaded")
     return data, labels
 
-def verifyCachedDataset(imageSize):
+def verifyCachedDataset():
     print("Verifying cached dataset...")
     data = np.load('./dataset/data.npy')
-    if data.shape[1] == imageSize and data.shape[2] == imageSize:
+    if data.shape[1] == IMAGE_SIZE and data.shape[2] == IMAGE_SIZE:
         print("\tSuccessfully verified cached dataset")
         return True
     else:

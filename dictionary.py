@@ -1,0 +1,6 @@
+IMAGE_SIZE = 50
+SPLITS = 5
+TRAIN_SIZE = 0.80
+EPOCHS = 50
+BATCH_SIZE = 512
+LABEL_NAMES = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
