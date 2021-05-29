@@ -9,7 +9,7 @@ from keras.layers.core import *
 from tensorflow.keras import regularizers
 
 def prepareData(data, labels):
-    X_train, X_test, y_train, y_test = train_test_split(data, labels, train_size = 0.7)
+    X_train, X_test, y_train, y_test = train_test_split(data, labels, train_size = 0.6)
     y_train = np_utils.to_categorical(y_train, num_classes = 10)
     y_test = np_utils.to_categorical(y_test, num_classes = 10)
     return X_train, X_test, y_train, y_test
@@ -30,8 +30,7 @@ def defineModel():
         Flatten(),
         Dense(64, activation = 'relu'),
         Dropout(0.5),
-        Dense(10),
-        Activation('sigmoid')
+        Dense(10, activation = 'sigmoid')
 
         # Flatten(input_shape = (50, 50, 3)),
         # Dense(256, activation = 'relu'),
