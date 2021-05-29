@@ -67,6 +67,8 @@ def defineModel():
     # model = Model(inputs=input1, outputs=dense2)
     # model.compile(loss='mse', optimizer='adadelta', metrics=['mse', 'mae'])
 
+# Checked matplotlib for how to create two-axis graphs:
+# https://matplotlib.org/stable/gallery/subplots_axes_and_figures/two_scales.html
 def plot(results):
     plt.clf()
     history_dict = results.history
