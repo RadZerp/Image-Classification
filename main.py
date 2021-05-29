@@ -36,7 +36,8 @@ model.summary()
 # print("Running cross validation...")
 # kfold = KFold(n_splits = 5, shuffle = True, random_state = 0) 
 # results = cross_val_score(crossVal_model, data, labels, cv = kfold)
-# print("%0.2f accuracy with a standard deviation of %0.2f" % (scores.mean(), scores.std()))
+# print("Cross validation results: " + str(results))
+# print("%0.2f accuracy with a standard deviation of %0.2f" % (results.mean(), results.std()))
 
 #train model
 
