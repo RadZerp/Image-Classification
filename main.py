@@ -17,26 +17,30 @@ else:
     data = segmentData(images, masks)
     cacheDataset(data, labels)
 
+#define values
+
 iterations = 50
 batchSize = 256
+model = defineModel()
+model.summary()
 
 #validate dataset
 
-model = tf.keras.wrappers.scikit_learn.KerasClassifier(
-    build_fn = defineModel, 
-    epochs = iterations, 
-    batch_size = batchSize, 
-    verbose = 0
-)
+# crossVal_model = tf.keras.wrappers.scikit_learn.KerasClassifier(
+#     build_fn = defineModel, 
+#     epochs = iterations, 
+#     batch_size = batchSize, 
+#     verbose = 0
+# )
 
-kfold = KFold(n_splits = 5, shuffle = True, random_state = 0) 
-results = cross_val_score(model, data, labels, cv = kfold)
-print("Cross validation score: " + str(results))
+# print("Running cross validation...")
+# kfold = KFold(n_splits = 5, shuffle = True, random_state = 0) 
+# results = cross_val_score(crossVal_model, data, labels, cv = kfold)
+# print("%0.2f accuracy with a standard deviation of %0.2f" % (scores.mean(), scores.std()))
 
 #train model
 
 X_train, X_test, y_train, y_test = prepareData(data, labels)
-model = defineModel()
 results = model.fit(
     X_train, 
     y_train, 
