@@ -34,11 +34,11 @@ def parseDataset():
     print("\tDataset is parsed")
     return images, masks, np.array(labels)
 
-def segmentData(images, masks):
+def segmentData(images, masks, imageSize):
     print("Segmenting data...")
     for image in range(len(images)):
         images[image] = cv2.bitwise_and(images[image], images[image], mask = masks[image])
-        images[image] = np.array(transform.resize(images[image], (50, 50), mode = "constant"))
+        images[image] = np.array(transform.resize(images[image], (imageSize, imageSize), mode = "constant"))
     print("\tSegmented " + str(len(images)) + " images")
     return np.array(images)
 
@@ -63,3 +63,13 @@ def loadCachedDataset():
     labels = np.load('./dataset/labels.npy')
     print("\tDataset is loaded")
     return data, labels
+
+def verifyCachedDataset(imageSize):
+    print("Verifying cached dataset...")
+    data = np.load('./dataset/data.npy')
+    if data.shape[1] == imageSize and data.shape[2] == imageSize:
+        print("\tSuccessfully verified cached dataset")
+        return True
+    else:
+        print("\tFailed to verify cached dataset")
+        return False

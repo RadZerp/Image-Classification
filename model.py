@@ -1,45 +1,12 @@
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 from keras.utils import np_utils
-from keras.models import Sequential
-from tensorflow import keras
-from keras.layers.convolutional import *
-from keras.layers.pooling import *
-from keras.layers.core import *
 
-def prepareData(data, labels):
-    X_train, X_test, y_train, y_test = train_test_split(data, labels, train_size = 0.80, random_state = 0)
-    y_train = np_utils.to_categorical(y_train, num_classes = 10)
-    y_test = np_utils.to_categorical(y_test, num_classes = 10)
-    return X_train, X_test, y_train, y_test
-
-def defineModel():
-    model = Sequential([
-        #https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html
-        
-        Conv2D(32, (3, 3), input_shape = (50, 50, 3), activation = 'relu'),
-        MaxPooling2D(pool_size = (2, 2)),
-        
-        Conv2D(32, (3, 3), activation = 'relu'),
-        MaxPooling2D(pool_size = (2, 2)),
-        
-        Conv2D(64, (3, 3), activation = 'relu'),
-        MaxPooling2D(pool_size = (2, 2)),
-        
-        Flatten(),
-
-        Dense(64, activation = 'relu'),
-        Dropout(0.5),
-
-        Dense(10, activation = 'sigmoid')
-    ])
-    opt = keras.optimizers.Adam(learning_rate = 0.01)
-    model.compile(
-        loss = 'categorical_crossentropy', 
-        optimizer = opt, 
-        metrics = ['accuracy']
-    )
-    return model
+def prepareData(data, labels, trainSize):
+    xTrain, xTest, yTrain, yTest = train_test_split(data, labels, train_size = trainSize, random_state = 0)
+    yTrain = np_utils.to_categorical(yTrain, num_classes = 10)
+    yTest = np_utils.to_categorical(yTest, num_classes = 10)
+    return xTrain, xTest, yTrain, yTest
 
 # Checked matplotlib for how to create two-axis graphs:
 # https://matplotlib.org/stable/gallery/subplots_axes_and_figures/two_scales.html
