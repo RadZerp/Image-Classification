@@ -72,11 +72,24 @@ def plot(results):
     history_dict = results.history
     loss_values = history_dict['loss']
     val_loss_values = history_dict['val_loss']
+    val_accuracy = history_dict['val_accuracy']
     epochs = range(1, (len(history_dict['loss']) + 1))
-    plt.plot(epochs, loss_values, 'bo', label = 'Training loss', c = 'lightgreen')
-    plt.plot(epochs, val_loss_values, 'b', label = 'Validation loss')
-    plt.title('Training and validation loss')
-    plt.xlabel('Epochs')
-    plt.ylabel('Loss')
+    fig, ax1 = plt.subplots()
+    
+    ax1.set_xlabel('Epochs')
+    ax1.set_ylabel('Loss')
+    ax1.plot(epochs, loss_values, 'b', label = 'Training loss', c = 'lightgreen')
+    ax1.plot(epochs, val_loss_values, 'b', label = 'Validation loss')
+    
+    ax2 = ax1.twinx()
+    
+    ax2.set_ylabel('Accuracy')
+    ax2.plot(epochs, val_accuracy, 'b', label = 'Validation accuracy', c = 'red')
+    plt.title('Training/validation loss and accuracy')
+    #plt.xlabel('Epochs')
+    #plt.ylabel('Loss')
+    
+    
+    fig.tight_layout()
     plt.legend()
     plt.show()
