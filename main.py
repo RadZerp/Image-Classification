@@ -25,7 +25,7 @@ results = model.fit(
     y_train, 
     validation_data = (X_test, y_test), 
     batch_size = 256, 
-    epochs = 5, 
+    epochs = 25, 
     verbose = 1
 )
 model.evaluate(X_test, y_test)
