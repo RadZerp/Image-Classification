@@ -22,16 +22,16 @@ batchSize = 256
 
 #validate dataset
 
-model = tf.keras.wrappers.scikit_learn.KerasClassifier(
-    build_fn = defineModel, 
-    epochs = iterations, 
-    batch_size = batchSize, 
-    verbose = 0
-)
+# model = tf.keras.wrappers.scikit_learn.KerasClassifier(
+#     build_fn = defineModel, 
+#     epochs = iterations, 
+#     batch_size = batchSize, 
+#     verbose = 0
+# )
 
-kfold = KFold(n_splits = 5, shuffle = True, random_state = 0) 
-results = cross_val_score(model, data, labels, cv = kfold)
-print("Cross validation score: " + str(results))
+# kfold = KFold(n_splits = 5, shuffle = True, random_state = 0) 
+# results = cross_val_score(model, data, labels, cv = kfold)
+# print("Cross validation score: " + str(results))
 
 #train model
 
