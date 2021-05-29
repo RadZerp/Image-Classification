@@ -25,7 +25,7 @@ results = model.fit(
     y_train, 
     validation_data = (X_test, y_test), 
     batch_size = 256, 
-    epochs = 25, 
+    epochs = 25,
     verbose = 1
 )
 model.evaluate(X_test, y_test)
@@ -39,3 +39,6 @@ y_test = np.argmax(y_test, axis = 1)
 target_names = ["1","2","3","4","5","6","7","8","9","10"]
 print(confusion_matrix(y_test, Y_pred))
 print(classification_report(y_test, Y_pred, target_names = target_names, zero_division = 1))
+
+tf.keras.utils.plot_model(model, show_shapes=True)
+
