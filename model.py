@@ -1,5 +1,5 @@
 # import local modules
-from dictionary import IMAGE_SIZE, SPLITS, TRAIN_SIZE, EPOCHS, BATCH_SIZE, LABEL_NAMES
+from dictionary import COLOR_IMAGE_SIZE, GRAY_IMAGE_SIZE, LABEL_NAMES
 # import foreign modules
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
@@ -28,37 +28,37 @@ def predictModel(model, xTest, yTest):
     print(classification_report(yTest, yPred, target_names = LABEL_NAMES, zero_division = 1))
     print(confusion_matrix(yTest, yPred))
 
-def trainModel(model, xTrain, xTest, yTrain, yTest, verboseFlag):
+def trainModel(model, xTrain, xTest, yTrain, yTest, batchSize, iterations, verboseFlag):
     # fit model by parameters
     results = model.fit(
         xTrain, 
         yTrain, 
         validation_data = (xTest, yTest), 
-        batch_size = BATCH_SIZE, 
-        epochs = EPOCHS,
+        batch_size = batchSize, 
+        epochs = iterations,
         verbose = verboseFlag
     )
     # evaluate model and output results
     model.evaluate(xTest, yTest)
     return model, results
 
-def calculateCrossValidation(model, data, labels, verboseFlag):
+def calculateCrossValidation(model, data, labels, batchSize, iterations, splits, verboseFlag):
     print("Running cross validation...")
     # set parameters for cross validation model
     crossVal_model = KerasClassifier(
         build_fn = model, 
-        batch_size = BATCH_SIZE, 
-        epochs = EPOCHS, 
+        batch_size = batchSize, 
+        epochs = iterations, 
         verbose = verboseFlag
     )
-    kfold = KFold(n_splits = SPLITS, shuffle = True, random_state = 0)
+    kfold = KFold(n_splits = splits, shuffle = True, random_state = 0)
     # calculate cross validation and output results
     results = cross_val_score(crossVal_model, data, labels, cv = kfold)
     print("Cross validation results: " + str(results))
     print("%0.2f accuracy with a standard deviation of %0.2f" % (results.mean(), results.std()))
 
-def prepareData(data, labels):
-    xTrain, xTest, yTrain, yTest = train_test_split(data, labels, train_size = TRAIN_SIZE, random_state = 0)
+def prepareData(data, labels, trainSize):
+    xTrain, xTest, yTrain, yTest = train_test_split(data, labels, train_size = trainSize, random_state = 0)
     yTrain = to_categorical(yTrain, num_classes = 10)
     yTest = to_categorical(yTest, num_classes = 10)
     return xTrain, xTest, yTrain, yTest
@@ -90,7 +90,7 @@ def plot(results):
 def defineModel():
     #https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html
     model = Sequential([
-        Conv2D(32, (3, 3), input_shape = (IMAGE_SIZE, IMAGE_SIZE, 3), activation = 'relu'),
+        Conv2D(32, (3, 3), input_shape = (COLOR_IMAGE_SIZE, COLOR_IMAGE_SIZE, 3), activation = 'relu'),
         MaxPooling2D(pool_size = (2, 2)),
         
         Conv2D(32, (3, 3), activation = 'relu'),
@@ -115,7 +115,7 @@ def defineModel():
 
 def defineGrayscaleModel():
     model = Sequential([
-        Dense(64, input_shape = (IMAGE_SIZE, IMAGE_SIZE), activation = 'relu'),
+        Dense(64, input_shape = (GRAY_IMAGE_SIZE, GRAY_IMAGE_SIZE), activation = 'relu'),
         Dropout(0.5),
         
         Flatten(),

@@ -2,6 +2,7 @@
 from datasetParser import initilizeDataset, parseDataset, segmentData, datasetIsCached, cacheDataset, loadCachedDataset, verifyCachedDataset
 from model import prepareData, plot, defineModel, defineGrayscaleModel, calculateCrossValidation, trainModel, predictModel, generateModelDiagram
 from preprocessing import grayscaleConverter, resizeImages
+from dictionary import COLOR_IMAGE_SIZE, COLOR_IMAGE_EPOCHS, COLOR_IMAGE_BATCH_SIZE, COLOR_IMAGE_SPLITS, COLOR_IMAGE_TRAIN_SIZE
 # import foreign modules
 from tensorflow import get_logger
 from logging import ERROR
@@ -23,7 +24,7 @@ else:
     # segment images
     images = segmentData(images, masks)
     # resize images
-    data = resizeImages(images)
+    data = resizeImages(images, COLOR_IMAGE_SIZE)
     # cache dataset to reduce loadtime for next runtime
     cacheDataset(data, labels)
 # convert images to grayscale
@@ -45,7 +46,7 @@ print("\n\nValidate dataset:\n\n")
 
 
 # calculate cross validation on model
-calculateCrossValidation(defineModel, data, labels, 0)
+calculateCrossValidation(defineModel, data, labels, COLOR_IMAGE_BATCH_SIZE, COLOR_IMAGE_EPOCHS, COLOR_IMAGE_SPLITS, 0)
 # calculate cross validation on grayscale model
 #calculateCrossValidation(defineGrayscaleModel, grayscaleData, labels, 0)
 
@@ -54,9 +55,9 @@ print("\n\nTrain model:\n\n")
 
 
 # prepare data by splitting
-xTrain, xTest, yTrain, yTest = prepareData(data, labels)
+xTrain, xTest, yTrain, yTest = prepareData(data, labels, COLOR_IMAGE_TRAIN_SIZE)
 # train model and plot results
-model, results = trainModel(model, xTrain, xTest, yTrain, yTest, 0)
+model, results = trainModel(model, xTrain, xTest, yTrain, yTest, COLOR_IMAGE_BATCH_SIZE, COLOR_IMAGE_EPOCHS, 0)
 plot(results)
 
 

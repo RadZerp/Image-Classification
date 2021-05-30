@@ -1,5 +1,5 @@
 # import local modules
-from dictionary import IMAGE_SIZE
+from dictionary import COLOR_IMAGE_SIZE
 # import foreign modules
 from zipfile import ZipFile
 from os import path, remove, listdir
@@ -68,7 +68,7 @@ def loadCachedDataset():
 def verifyCachedDataset():
     print("Verifying cached dataset...")
     data = np.load('./dataset/data.npy')
-    if data.shape[1] == IMAGE_SIZE and data.shape[2] == IMAGE_SIZE:
+    if data.shape[1] == COLOR_IMAGE_SIZE and data.shape[2] == COLOR_IMAGE_SIZE:
         print("\tSuccessfully verified cached dataset")
         return True
     else:
