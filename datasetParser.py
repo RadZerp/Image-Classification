@@ -1,5 +1,3 @@
-# import local modules
-from dictionary import COLOR_IMAGE_SIZE
 # import foreign modules
 from zipfile import ZipFile
 from os import path, remove, listdir
@@ -33,44 +31,42 @@ def parseDataset():
             images.append(img[:,:,::-1])
             masks.append(mask)
             labels.append(int(filename[:3]) - 1)
-    print("\tDataset is parsed")
+    print("\tSuccessfully parsed dataset")
     return images, masks, np.array(labels)
 
 def segmentData(images, masks):
-    print("Segmenting data...")
+    print("Segmenting images...")
     for image in range(len(images)):
         images[image] = bitwise_and(images[image], images[image], mask = masks[image])
-    print("\tSegmented " + str(len(images)) + " images")
+    print("\tSuccessfully segmented " + str(len(images)) + " images")
     return images
 
-def datasetIsCached():
-    print("Checking if dataset is cached...")
-    if path.exists("./dataset/data.npy") and path.exists('./dataset/labels.npy'):
-        print("\tFound cached dataset")
+def isCached(filename):
+    print("Checking if " + filename + " is cached...")
+    if path.exists(path.join("dataset", filename + '.npy')):
+        print("\tSuccessfully found cached " + filename)
         return True
     else:
-        print("\tDidn't find cached dataset")
+        print("\tFailed to find cached " + filename)
         return False
 
-def cacheDataset(data, labels):
-    print("Caching dataset...")
-    np.save('./dataset/data.npy', data)
-    np.save('./dataset/labels.npy', labels)
-    print("\tDataset is cached")
+def cacheData(data, filename):
+    print("Caching " + filename + "...")
+    np.save(path.join("dataset", filename + '.npy'), data)
+    print("\tSuccessfully cached" + filename)
 
-def loadCachedDataset():
-    print("Loading cached dataset...")
-    data = np.load('./dataset/data.npy')
-    labels = np.load('./dataset/labels.npy')
-    print("\tDataset is loaded")
-    return data, labels
+def loadCachedData(filename):
+    print("Loading cached " + filename + "...")
+    data = np.load(path.join("dataset", filename + '.npy'))
+    print("\tSuccessfully loaded cached " + filename)
+    return data
 
-def verifyCachedDataset():
-    print("Verifying cached dataset...")
-    data = np.load('./dataset/data.npy')
-    if data.shape[1] == COLOR_IMAGE_SIZE and data.shape[2] == COLOR_IMAGE_SIZE:
-        print("\tSuccessfully verified cached dataset")
+def verifyCachedData(imageSize, filename):
+    print("Verifying cached " + filename + "...")
+    data = np.load(path.join("dataset", filename + '.npy'))
+    if data.shape[1] == imageSize and data.shape[2] == imageSize:
+        print("\tSuccessfully verified cached " + filename)
         return True
     else:
-        print("\tFailed to verify cached dataset")
+        print("\tFailed to verify cached " + filename)
         return False

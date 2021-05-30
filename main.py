@@ -1,8 +1,37 @@
 # import local modules
-from datasetParser import initilizeDataset, parseDataset, segmentData, datasetIsCached, cacheDataset, loadCachedDataset, verifyCachedDataset
-from model import prepareData, plot, defineModel, defineGrayscaleModel, calculateCrossValidation, trainModel, predictModel, generateModelDiagram
+from dictionary import (
+    LABEL_FILENAME,
+    COLOR_MODEL_STATUS,
+    COLOR_DATA_FILENAME,
+    COLOR_IMAGE_SIZE, 
+    COLOR_IMAGE_EPOCHS, 
+    COLOR_IMAGE_BATCH_SIZE, 
+    COLOR_IMAGE_SPLITS, 
+    COLOR_IMAGE_TRAIN_SIZE,
+    GRAY_MODEL_STATUS,
+    GRAY_DATA_FILENAME,
+    GRAY_IMAGE_SIZE
+)
+from datasetParser import (
+    initilizeDataset, 
+    parseDataset, 
+    segmentData, 
+    isCached, 
+    cacheData, 
+    loadCachedData, 
+    verifyCachedData
+)
+from model import (
+    prepareData, 
+    plot, 
+    defineModel, 
+    defineGrayscaleModel, 
+    calculateCrossValidation, 
+    trainModel, 
+    predictModel, 
+    generateModelDiagram
+)
 from preprocessing import grayscaleConverter, resizeImages
-from dictionary import COLOR_IMAGE_SIZE, COLOR_IMAGE_EPOCHS, COLOR_IMAGE_BATCH_SIZE, COLOR_IMAGE_SPLITS, COLOR_IMAGE_TRAIN_SIZE
 # import foreign modules
 from tensorflow import get_logger
 from logging import ERROR
@@ -15,8 +44,9 @@ print("\n\nGet dataset:\n\n")
 
 
 # branch if dataset is cached, otherwise initilize dataset
-if datasetIsCached() and verifyCachedDataset():
-    data, labels = loadCachedDataset()
+if COLOR_MODEL_STATUS and isCached(COLOR_DATA_FILENAME) and verifyCachedData(COLOR_IMAGE_SIZE, COLOR_DATA_FILENAME):
+    data = loadCachedData(COLOR_DATA_FILENAME)
+    labels = loadCachedData(LABEL_FILENAME)
 else:
     initilizeDataset()
     # parse dataset to numpy arrays
@@ -26,7 +56,8 @@ else:
     # resize images
     data = resizeImages(images, COLOR_IMAGE_SIZE)
     # cache dataset to reduce loadtime for next runtime
-    cacheDataset(data, labels)
+    cacheData(data, COLOR_DATA_FILENAME)
+    cacheData(labels, LABEL_FILENAME)
 # convert images to grayscale
 grayscaleData = grayscaleConverter(data)
 
