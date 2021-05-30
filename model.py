@@ -87,7 +87,7 @@ def plot(results):
     fig.tight_layout()
     plt.show()
 
-def defineModel():
+def defineModelColor():
     #https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html
     model = Sequential([
         Conv2D(32, (3, 3), input_shape = (COLOR_IMAGE_SIZE, COLOR_IMAGE_SIZE, 3), activation = 'relu'),
@@ -113,7 +113,7 @@ def defineModel():
     )
     return model
 
-def defineGrayscaleModel():
+def defineModelGray():
     model = Sequential([
         Dense(64, input_shape = (GRAY_IMAGE_SIZE, GRAY_IMAGE_SIZE), activation = 'relu'),
         Dropout(0.5),
