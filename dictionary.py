@@ -1,5 +1,6 @@
 LABEL_FILENAME = 'labels'
 LABEL_NAMES = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+CROSS_VALIDATION = False
 # set parameters for RGB color data
 COLOR_MODEL_STATUS = False
 COLOR_DATA_FILENAME = 'color-data'
@@ -11,9 +12,9 @@ COLOR_IMAGE_BATCH_SIZE = 512
 # set parameters for gray color data
 GRAY_MODEL_STATUS = True
 GRAY_DATA_FILENAME = 'gray-data'
-GRAY_IMAGE_SIZE = 50
+GRAY_IMAGE_SIZE = 100
 GRAY_IMAGE_SPLITS = 5
-GRAY_IMAGE_TRAIN_SIZE = 0.80
+GRAY_IMAGE_TRAIN_SIZE = 0.60
 GRAY_IMAGE_EPOCHS = 50
 GRAY_IMAGE_BATCH_SIZE = 512
 # status messages

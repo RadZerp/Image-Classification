@@ -9,6 +9,7 @@ from tensorflow.keras.optimizers import Adam
 from keras.layers.convolutional import Conv2D
 from keras.layers.pooling import MaxPooling2D
 from keras.layers.core import Flatten, Dense, Dropout
+from tensorflow.keras import regularizers
 from sklearn.model_selection import KFold, cross_val_score
 from tensorflow.keras.wrappers.scikit_learn import KerasClassifier
 from tensorflow.keras.utils import plot_model
@@ -115,8 +116,10 @@ def defineModelColor():
 
 def defineModelGray():
     model = Sequential([
-        Dense(64, input_shape = (GRAY_IMAGE_SIZE, GRAY_IMAGE_SIZE), activation = 'relu'),
-        Dropout(0.5),
+        Dense(256, input_shape = (GRAY_IMAGE_SIZE, GRAY_IMAGE_SIZE), activation = 'relu', kernel_regularizer = regularizers.l1(0.001)),
+        Dropout(0.02),
+        
+        Dense(512, activation = 'relu'),
         
         Flatten(),
 

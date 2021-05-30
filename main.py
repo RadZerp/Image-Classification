@@ -14,7 +14,8 @@ from dictionary import (
     GRAY_IMAGE_SPLITS,
     GRAY_IMAGE_TRAIN_SIZE,
     GRAY_IMAGE_EPOCHS,
-    GRAY_IMAGE_BATCH_SIZE
+    GRAY_IMAGE_BATCH_SIZE,
+    CROSS_VALIDATION
 )
 from datasetParser import (
     initilizeDataset, 
@@ -107,32 +108,32 @@ if GRAY_MODEL_STATUS:
     modelGray = defineModelGray()
     modelGray.summary()
 
+if CROSS_VALIDATION:
+    print("\n\nValidate model:\n\n")
 
-print("\n\nValidate model:\n\n")
 
-
-if COLOR_MODEL_STATUS:
-    # calculate cross validation of model
-    calculateCrossValidation(
-        defineModelColor, 
-        dataColor, 
-        labels, 
-        COLOR_IMAGE_BATCH_SIZE, 
-        COLOR_IMAGE_EPOCHS, 
-        COLOR_IMAGE_SPLITS, 
-        False
-    )
-if GRAY_MODEL_STATUS:
-    # calculate cross validation of model
-    calculateCrossValidation(
-        defineModelGray, 
-        dataGray, 
-        labels, 
-        GRAY_IMAGE_BATCH_SIZE, 
-        GRAY_IMAGE_EPOCHS, 
-        GRAY_IMAGE_SPLITS, 
-        False
-    )
+    if COLOR_MODEL_STATUS:
+        # calculate cross validation of model
+        calculateCrossValidation(
+            defineModelColor, 
+            dataColor, 
+            labels, 
+            COLOR_IMAGE_BATCH_SIZE, 
+            COLOR_IMAGE_EPOCHS, 
+            COLOR_IMAGE_SPLITS, 
+            False
+        )
+    if GRAY_MODEL_STATUS:
+        # calculate cross validation of model
+        calculateCrossValidation(
+            defineModelGray, 
+            dataGray, 
+            labels, 
+            GRAY_IMAGE_BATCH_SIZE, 
+            GRAY_IMAGE_EPOCHS, 
+            GRAY_IMAGE_SPLITS, 
+            False
+        )
 
 
 print("\n\nTrain model:\n\n")
@@ -147,7 +148,7 @@ if GRAY_MODEL_STATUS:
     # prepare data by splitting
     xTrainGray, xTestGray, yTrainGray, yTestGray = prepareData(dataGray, labels, GRAY_IMAGE_TRAIN_SIZE)
     # train model and plot results
-    modelGray, results = trainModel(modelGray, xTrainGray, xTestGray, yTrainGray, yTestGray, GRAY_IMAGE_BATCH_SIZE, GRAY_IMAGE_EPOCHS, 0)
+    modelGray, results = trainModel(modelGray, xTrainGray, xTestGray, yTrainGray, yTestGray, GRAY_IMAGE_BATCH_SIZE, GRAY_IMAGE_EPOCHS, 1)
     plot(results)
 
 print("\n\nPredict model:\n\n")
