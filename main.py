@@ -112,10 +112,14 @@ print("\n\nDefine model:\n\n")
 if COLOR_MODEL_STATUS:
     # define and print summary of model
     modelColor = defineModelColor()
+    # generate an image of the model summary
+    generateModelDiagram(modelColor, "modelColor.png")
     modelColor.summary()
 if GRAY_MODEL_STATUS:
     # define and print summary of model
     modelGray = defineModelGray()
+    # generate an image of the model summary
+    generateModelDiagram(modelGray, "modelGray.png")
     modelGray.summary()
 
 # checks if cross validation variable is set to true
@@ -170,10 +174,6 @@ print("\n\nPredict model:\n\n")
 if COLOR_MODEL_STATUS:
     # output prediction results 
     predictModel(modelColor, xTestColor, yTestColor)
-    # generate an image of the model summary
-    #generateModelDiagram(modelColor, "modelColor")
 if GRAY_MODEL_STATUS:
     # output prediction results 
     predictModel(modelGray, xTestGray, yTestGray)
-    # generate an image of the model summary
-    #generateModelDiagram(modelGray, "modelGray")

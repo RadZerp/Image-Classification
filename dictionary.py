@@ -1,7 +1,7 @@
 LABEL_FILENAME = 'labels'
 LABEL_NAMES = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 # status - wether to run these during runtime
-CROSS_VALIDATION_STATUS = True
+CROSS_VALIDATION_STATUS = False
 COLOR_MODEL_STATUS = True
 GRAY_MODEL_STATUS = False
 # set parameters for RGB color data
