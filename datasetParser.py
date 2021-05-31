@@ -27,9 +27,7 @@ def initilizeDataset():
         print(SUCCESS)
 
 def parseDataset():
-    images = []
-    masks = []
-    labels = []
+    images = masks = labels = []
     print('{:<40s}'.format("Parsing dataset..."), end = "", flush = True)
     for filename in listdir("dataset/leedsbutterfly/images"):
         img = imread(path.join("dataset/leedsbutterfly/images", filename))

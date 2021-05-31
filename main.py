@@ -38,6 +38,8 @@ from model import (
 )
 from preprocessing import grayscaleConverter, resizeImages
 # import foreign modules
+import numpy as np
+import matplotlib.pyplot as plt
 from tensorflow import get_logger
 from logging import ERROR
 
@@ -92,6 +94,8 @@ if GRAY_MODEL_STATUS:
         dataGray = resizeImages(data, GRAY_IMAGE_SIZE)
         # convert images to grayscale
         dataGray = grayscaleConverter(dataGray)
+        # added axis to handle convolutional layers
+        dataGray = np.expand_dims(dataGray, axis = 3)
         # cache dataset to reduce loadtime for next runtime
         cacheData(dataGray, GRAY_DATA_FILENAME)
 
@@ -148,7 +152,7 @@ if GRAY_MODEL_STATUS:
     # prepare data by splitting
     xTrainGray, xTestGray, yTrainGray, yTestGray = prepareData(dataGray, labels, GRAY_IMAGE_TRAIN_SIZE)
     # train model and plot results
-    modelGray, results = trainModel(modelGray, xTrainGray, xTestGray, yTrainGray, yTestGray, GRAY_IMAGE_BATCH_SIZE, GRAY_IMAGE_EPOCHS, 1)
+    modelGray, results = trainModel(modelGray, xTrainGray, xTestGray, yTrainGray, yTestGray, GRAY_IMAGE_BATCH_SIZE, GRAY_IMAGE_EPOCHS, 0)
     plot(results)
 
 print("\n\nPredict model:\n\n")

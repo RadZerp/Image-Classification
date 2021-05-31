@@ -116,12 +116,19 @@ def defineModelColor():
 
 def defineModelGray():
     model = Sequential([
-        Dense(256, input_shape = (GRAY_IMAGE_SIZE, GRAY_IMAGE_SIZE), activation = 'relu', kernel_regularizer = regularizers.l1(0.001)),
-        Dropout(0.02),
+        Conv2D(32, (3, 3), input_shape = (GRAY_IMAGE_SIZE, GRAY_IMAGE_SIZE, 1), activation = 'relu'),
+        MaxPooling2D(pool_size = (2, 2)),
         
-        Dense(512, activation = 'relu'),
+        Conv2D(32, (3, 3), activation = 'relu'),
+        MaxPooling2D(pool_size = (2, 2)),
+
+        Conv2D(64, (3, 3), activation = 'relu'),
+        MaxPooling2D(pool_size = (2, 2)),
         
         Flatten(),
+
+        Dense(64, activation = 'relu'),
+        Dropout(0.5),
 
         Dense(10, activation = 'sigmoid')
     ])
