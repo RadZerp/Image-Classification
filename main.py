@@ -168,9 +168,9 @@ if COLOR_MODEL_STATUS:
     # output prediction results 
     predictModel(modelColor, xTestColor, yTestColor)
     # generate an image of the model summary
-    #generateModelDiagram(modelColor)
+    #generateModelDiagram(modelColor, "modelColor")
 if GRAY_MODEL_STATUS:
     # output prediction results 
     predictModel(modelGray, xTestGray, yTestGray)
     # generate an image of the model summary
-    #generateModelDiagram(modelGray)
+    #generateModelDiagram(modelGray, "modelGray")

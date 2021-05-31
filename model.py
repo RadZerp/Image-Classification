@@ -16,8 +16,8 @@ from tensorflow.keras.utils import plot_model
 from sklearn.metrics import confusion_matrix, classification_report
 from numpy import argmax
 
-def generateModelDiagram(model):
-    plot_model(model, show_shapes = True)
+def generateModelDiagram(model, filename):
+    plot_model(model, to_file = filename, show_shapes = True)
 
 def predictModel(model, xTest, yTest):
     # predict dataset on model
