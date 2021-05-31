@@ -89,7 +89,6 @@ def plot(results):
     plt.show()
 
 def defineModelColor():
-    #https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html
     model = Sequential([
         Conv2D(32, (3, 3), input_shape = (COLOR_IMAGE_SIZE, COLOR_IMAGE_SIZE, 3), activation = 'relu'),
         MaxPooling2D(pool_size = (2, 2)),
