@@ -15,7 +15,7 @@ from dictionary import (
     GRAY_IMAGE_TRAIN_SIZE,
     GRAY_IMAGE_EPOCHS,
     GRAY_IMAGE_BATCH_SIZE,
-    CROSS_VALIDATION
+    CROSS_VALIDATION_STATUS
 )
 from datasetParser import (
     initilizeDataset, 
@@ -116,7 +116,7 @@ if GRAY_MODEL_STATUS:
     modelGray.summary()
 
 
-if CROSS_VALIDATION:
+if CROSS_VALIDATION_STATUS:
     print("\n\nValidate model:\n\n")
 
 
@@ -168,9 +168,9 @@ if COLOR_MODEL_STATUS:
     # output prediction results 
     predictModel(modelColor, xTestColor, yTestColor)
     # generate an image of the model summary
-    #generateModelDiagram(modelColor)
+    #generateModelDiagram(modelColor, "modelColor")
 if GRAY_MODEL_STATUS:
     # output prediction results 
     predictModel(modelGray, xTestGray, yTestGray)
     # generate an image of the model summary
-    #generateModelDiagram(modelGray)
+    #generateModelDiagram(modelGray, "modelGray")

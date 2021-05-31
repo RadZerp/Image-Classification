@@ -16,9 +16,9 @@ from tensorflow.keras.utils import plot_model
 from sklearn.metrics import confusion_matrix, classification_report
 from numpy import argmax
 
-# simple function to draw the design of our model
-def generateModelDiagram(model):
-    plot_model(model, show_shapes = True)
+def generateModelDiagram(model, filename):
+    plot_model(model, to_file = filename, show_shapes = True)
+
 
 # function for running model.predict
 def predictModel(model, xTest, yTest):
@@ -96,7 +96,6 @@ def plot(results):
 
 # model definition for color images
 def defineModelColor():
-    #https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html
     model = Sequential([
         Conv2D(32, (3, 3), input_shape = (COLOR_IMAGE_SIZE, COLOR_IMAGE_SIZE, 3), activation = 'relu'),
         MaxPooling2D(pool_size = (2, 2)),
