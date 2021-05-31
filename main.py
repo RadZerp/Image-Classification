@@ -112,6 +112,7 @@ if GRAY_MODEL_STATUS:
     modelGray = defineModelGray()
     modelGray.summary()
 
+
 if CROSS_VALIDATION:
     print("\n\nValidate model:\n\n")
 
@@ -142,6 +143,7 @@ if CROSS_VALIDATION:
 
 print("\n\nTrain model:\n\n")
 
+
 if COLOR_MODEL_STATUS:
     # prepare data by splitting
     xTrainColor, xTestColor, yTrainColor, yTestColor = prepareData(dataColor, labels, COLOR_IMAGE_TRAIN_SIZE)
@@ -154,6 +156,7 @@ if GRAY_MODEL_STATUS:
     # train model and plot results
     modelGray, results = trainModel(modelGray, xTrainGray, xTestGray, yTrainGray, yTestGray, GRAY_IMAGE_BATCH_SIZE, GRAY_IMAGE_EPOCHS, 0)
     plot(results)
+
 
 print("\n\nPredict model:\n\n")
 
