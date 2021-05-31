@@ -7,6 +7,7 @@ from requests import get
 from cv2 import imread, bitwise_and
 import numpy as np
 
+# function that gets our dataset from its host URL
 def initilizeDataset():
     print('{:<40s}'.format("Initializing dataset..."), end = "", flush = True)
     if (path.exists("./dataset/leedsbutterfly") == False):
@@ -26,6 +27,7 @@ def initilizeDataset():
     else:
         print(SUCCESS)
 
+# parses our dataset and loads it into memory
 def parseDataset():
     images = []
     masks = []
@@ -41,6 +43,7 @@ def parseDataset():
     print(DONE)
     return images, masks, np.array(labels)
 
+# runs segmentation on our images using the masks to remove background
 def segmentData(images, masks):
     print('{:<40s}'.format("Segmenting images..."), end = "", flush = True)
     for image in range(len(images)):
@@ -48,6 +51,7 @@ def segmentData(images, masks):
     print(DONE)
     return images
 
+# checks if dataset is cached
 def isCached(filename):
     print('{:<40s}'.format("Checking if " + filename + " is cached..."), end = "", flush = True)
     if path.exists(path.join("dataset", filename + '.npy')):
@@ -57,17 +61,21 @@ def isCached(filename):
         print(FAILED)
         return False
 
+# caches dataset
 def cacheData(data, filename):
     print('{:<40s}'.format("Caching " + filename + "..."), end = "", flush = True)
     np.save(path.join("dataset", filename + '.npy'), data)
     print(DONE)
 
+# loads cached dataset
 def loadCachedData(filename):
     print('{:<40s}'.format("Loading cached " + filename + "..."), end = "", flush = True)
     data = np.load(path.join("dataset", filename + '.npy'))
     print(DONE)
     return data
 
+# verifies data of cached dataset - important in cases of for example changed image resizing,
+# or simply corrupted data
 def verifyCachedData(imageSize, filename):
     print('{:<40s}'.format("Verifying cached " + filename + "..."), end = "", flush = True)
     data = np.load(path.join("dataset", filename + '.npy'))

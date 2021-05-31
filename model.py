@@ -16,19 +16,22 @@ from tensorflow.keras.utils import plot_model
 from sklearn.metrics import confusion_matrix, classification_report
 from numpy import argmax
 
+# simple function to draw the design of our model
 def generateModelDiagram(model):
     plot_model(model, show_shapes = True)
 
+# function for running model.predict
 def predictModel(model, xTest, yTest):
     # predict dataset on model
     yPred = model.predict(xTest)
-    # flatten each array to highest value
+    # flatten each array to get index of highest value
     yPred = argmax(yPred, axis = 1)
     yTest = argmax(yTest, axis = 1)
     # print classification report and confusion matrix
     print(classification_report(yTest, yPred, target_names = LABEL_NAMES, zero_division = 1))
     print(confusion_matrix(yTest, yPred))
 
+# function to run model.fit
 def trainModel(model, xTrain, xTest, yTrain, yTest, batchSize, iterations, verboseFlag):
     # fit model by parameters
     results = model.fit(
@@ -43,6 +46,7 @@ def trainModel(model, xTrain, xTest, yTrain, yTest, batchSize, iterations, verbo
     model.evaluate(xTest, yTest)
     return model, results
 
+# cross validation function
 def calculateCrossValidation(model, data, labels, batchSize, iterations, splits, verboseFlag):
     print("Running cross validation...")
     # set parameters for cross validation model
@@ -58,13 +62,15 @@ def calculateCrossValidation(model, data, labels, batchSize, iterations, splits,
     print("Cross validation results: " + str(results))
     print("%0.2f accuracy with a standard deviation of %0.2f" % (results.mean(), results.std()))
 
+# performs train-test-split
 def prepareData(data, labels, trainSize):
     xTrain, xTest, yTrain, yTest = train_test_split(data, labels, train_size = trainSize, random_state = 0)
     yTrain = to_categorical(yTrain, num_classes = 10)
     yTest = to_categorical(yTest, num_classes = 10)
     return xTrain, xTest, yTrain, yTest
 
-# Checked matplotlib for how to create two-axis graphs:
+# plots a graph with the results of model.fit
+# checked matplotlib for how to create two-axis graphs:
 # https://matplotlib.org/stable/gallery/subplots_axes_and_figures/two_scales.html
 def plot(results):
     plt.clf()
@@ -88,6 +94,7 @@ def plot(results):
     fig.tight_layout()
     plt.show()
 
+# model definition for color images
 def defineModelColor():
     #https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html
     model = Sequential([
@@ -114,6 +121,7 @@ def defineModelColor():
     )
     return model
 
+# model definition for grayscale images
 def defineModelGray():
     model = Sequential([
         Conv2D(32, (3, 3), input_shape = (GRAY_IMAGE_SIZE, GRAY_IMAGE_SIZE, 1), activation = 'relu'),
