@@ -50,7 +50,10 @@ get_logger().setLevel(ERROR)
 print("\n\nGet dataset:\n\n")
 
 
-images = masks = labels = data = None
+images = None
+masks = None
+labels = None
+data = None
 
 if COLOR_MODEL_STATUS or GRAY_MODEL_STATUS:
     # branch if labels are cached, otherwise get labels
