@@ -55,6 +55,7 @@ masks = None
 labels = None
 data = None
 
+# check whether we to prepare work on either dataset
 if COLOR_MODEL_STATUS or GRAY_MODEL_STATUS:
     # branch if labels are cached, otherwise get labels
     if isCached(LABEL_FILENAME):
@@ -65,6 +66,7 @@ if COLOR_MODEL_STATUS or GRAY_MODEL_STATUS:
         images, masks, labels = parseDataset()
         # cache data to reduce loadtime for next runtime
         cacheData(labels, LABEL_FILENAME)
+# checks if color status variable is set to true
 if COLOR_MODEL_STATUS:
     # branch if color images are cached, otherwise get data
     if isCached(COLOR_DATA_FILENAME) and verifyCachedData(COLOR_IMAGE_SIZE, COLOR_DATA_FILENAME):
@@ -81,6 +83,7 @@ if COLOR_MODEL_STATUS:
         dataColor = resizeImages(data, COLOR_IMAGE_SIZE)
         # cache dataset to reduce loadtime for next runtime
         cacheData(dataColor, COLOR_DATA_FILENAME)
+# checks if grayscale status variable is set to true
 if GRAY_MODEL_STATUS:
     # branch if gray images are cached, otherwise get data
     if isCached(GRAY_DATA_FILENAME) and verifyCachedData(GRAY_IMAGE_SIZE, GRAY_DATA_FILENAME):
@@ -115,7 +118,7 @@ if GRAY_MODEL_STATUS:
     modelGray = defineModelGray()
     modelGray.summary()
 
-
+# checks if cross validation variable is set to true
 if CROSS_VALIDATION_STATUS:
     print("\n\nValidate model:\n\n")
 
