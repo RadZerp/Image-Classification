@@ -122,12 +122,13 @@ if CROSS_VALIDATION_STATUS:
         SPLITS, 
         False
     )
+    print('\n')
 
 
 # prepare data by splitting
 xTrain, xTest, yTrain, yTest = prepareData(data, labels, TRAIN_SIZE)
 # train model and plot results
-print("\n\nTraining model...")
+print("\nTraining model...")
 model, results = trainModel(model, xTrain, xTest, yTrain, yTest, BATCH_SIZE, EPOCHS, 0)
 plot(results)
 print('\n')
