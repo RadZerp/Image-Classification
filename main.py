@@ -1,21 +1,22 @@
 # import local modules
 from dictionary import (
     LABEL_FILENAME,
-    COLOR_MODEL_STATUS,
     COLOR_DATA_FILENAME,
+    COLOR_IMAGE_FILENAME,
     COLOR_IMAGE_SIZE, 
     COLOR_IMAGE_EPOCHS, 
     COLOR_IMAGE_BATCH_SIZE, 
     COLOR_IMAGE_SPLITS, 
     COLOR_IMAGE_TRAIN_SIZE,
-    GRAY_MODEL_STATUS,
     GRAY_DATA_FILENAME,
+    GRAY_IMAGE_FILENAME,
     GRAY_IMAGE_SIZE,
     GRAY_IMAGE_SPLITS,
     GRAY_IMAGE_TRAIN_SIZE,
     GRAY_IMAGE_EPOCHS,
     GRAY_IMAGE_BATCH_SIZE,
-    CROSS_VALIDATION_STATUS
+    CROSS_VALIDATION_STATUS,
+    CONVERT_TO_GRAYSCALE
 )
 from datasetParser import (
     initilizeDataset, 
@@ -39,141 +40,97 @@ from model import (
 from preprocessing import grayscaleConverter, resizeImages
 # import foreign modules
 import numpy as np
-import matplotlib.pyplot as plt
 from tensorflow import get_logger
 from logging import ERROR
 
 # remove warnings outputted by tensorflow during cross validation
 get_logger().setLevel(ERROR)
 
-
-print("\n\nGet dataset:\n\n")
+# set data according to model type
+if CONVERT_TO_GRAYSCALE:
+    DATA_FILENAME = GRAY_DATA_FILENAME
+    IMAGE_FILENAME = GRAY_IMAGE_FILENAME
+    IMAGE_SIZE = GRAY_IMAGE_SIZE
+    BATCH_SIZE = GRAY_IMAGE_BATCH_SIZE
+    EPOCHS = GRAY_IMAGE_EPOCHS
+    SPLITS = GRAY_IMAGE_SPLITS
+    TRAIN_SIZE = GRAY_IMAGE_TRAIN_SIZE
+    DEFINE_MODEL = defineModelGray
+else:
+    DATA_FILENAME = COLOR_DATA_FILENAME
+    IMAGE_FILENAME = COLOR_IMAGE_FILENAME
+    IMAGE_SIZE = COLOR_IMAGE_SIZE
+    BATCH_SIZE = COLOR_IMAGE_BATCH_SIZE
+    EPOCHS = COLOR_IMAGE_EPOCHS
+    SPLITS = COLOR_IMAGE_SPLITS
+    TRAIN_SIZE = COLOR_IMAGE_TRAIN_SIZE
+    DEFINE_MODEL = defineModelColor
 
 
 images = None
 masks = None
 labels = None
-data = None
-
-# check whether we to prepare work on either dataset
-if COLOR_MODEL_STATUS or GRAY_MODEL_STATUS:
-    # branch if labels are cached, otherwise get labels
-    if isCached(LABEL_FILENAME):
-        labels = loadCachedData(LABEL_FILENAME)
-    else:
+# branch if labels are cached, otherwise get labels
+if isCached(LABEL_FILENAME):
+    labels = loadCachedData(LABEL_FILENAME)
+else:
+    initilizeDataset()
+    # parse dataset to numpy arrays
+    images, masks, labels = parseDataset()
+    # cache data to reduce loadtime for next runtime
+    cacheData(labels, LABEL_FILENAME)
+# branch if data is cached, otherwise get data
+if isCached(DATA_FILENAME) and verifyCachedData(IMAGE_SIZE, DATA_FILENAME):
+    data = loadCachedData(DATA_FILENAME)
+else:
+    # parse dataset to numpy arrays
+    if images is None or masks is None:
         initilizeDataset()
-        # parse dataset to numpy arrays
-        images, masks, labels = parseDataset()
-        # cache data to reduce loadtime for next runtime
-        cacheData(labels, LABEL_FILENAME)
-# checks if color status variable is set to true
-if COLOR_MODEL_STATUS:
-    # branch if color images are cached, otherwise get data
-    if isCached(COLOR_DATA_FILENAME) and verifyCachedData(COLOR_IMAGE_SIZE, COLOR_DATA_FILENAME):
-        dataColor = loadCachedData(COLOR_DATA_FILENAME)
-    else:
-        if data is None:
-            # parse dataset to numpy arrays
-            if images is None or masks is None:
-                initilizeDataset()
-                images, masks, _ = parseDataset()
-            # segment images
-            data = segmentData(images, masks)
-        # resize images
-        dataColor = resizeImages(data, COLOR_IMAGE_SIZE)
-        # cache dataset to reduce loadtime for next runtime
-        cacheData(dataColor, COLOR_DATA_FILENAME)
-# checks if grayscale status variable is set to true
-if GRAY_MODEL_STATUS:
-    # branch if gray images are cached, otherwise get data
-    if isCached(GRAY_DATA_FILENAME) and verifyCachedData(GRAY_IMAGE_SIZE, GRAY_DATA_FILENAME):
-        dataGray = loadCachedData(GRAY_DATA_FILENAME)
-    else:
-        if data is None:
-            # parse dataset to numpy arrays
-            if images is None or masks is None:
-                initilizeDataset()
-                images, masks, _ = parseDataset()
-            # segment images
-            data = segmentData(images, masks)
-        # resize images
-        dataGray = resizeImages(data, GRAY_IMAGE_SIZE)
+        images, masks, _ = parseDataset()
+    # segment images
+    data = segmentData(images, masks)
+    # resize images
+    data = resizeImages(data, IMAGE_SIZE)
+    if CONVERT_TO_GRAYSCALE:
         # convert images to grayscale
-        dataGray = grayscaleConverter(dataGray)
+        data = grayscaleConverter(data)
         # added axis to handle convolutional layers
-        dataGray = np.expand_dims(dataGray, axis = 3)
-        # cache dataset to reduce loadtime for next runtime
-        cacheData(dataGray, GRAY_DATA_FILENAME)
+        data = np.expand_dims(data, axis = 3)
+    # cache dataset to reduce loadtime for next runtime
+    cacheData(data, DATA_FILENAME)
+print('\n')
 
 
-print("\n\nDefine model:\n\n")
+# define and print summary of model
+model = DEFINE_MODEL()
+model.summary()
+# generate an image of the model summary
+#generateModelDiagram(model, IMAGE_FILENAME)
+print('\n')
 
-
-if COLOR_MODEL_STATUS:
-    # define and print summary of model
-    modelColor = defineModelColor()
-    # generate an image of the model summary
-    generateModelDiagram(modelColor, "modelColor.png")
-    modelColor.summary()
-if GRAY_MODEL_STATUS:
-    # define and print summary of model
-    modelGray = defineModelGray()
-    # generate an image of the model summary
-    generateModelDiagram(modelGray, "modelGray.png")
-    modelGray.summary()
 
 # checks if cross validation variable is set to true
 if CROSS_VALIDATION_STATUS:
-    print("\n\nValidate model:\n\n")
+    # calculate cross validation of model
+    calculateCrossValidation(
+        DEFINE_MODEL, 
+        data, 
+        labels, 
+        BATCH_SIZE, 
+        EPOCHS, 
+        SPLITS, 
+        False
+    )
 
 
-    if COLOR_MODEL_STATUS:
-        # calculate cross validation of model
-        calculateCrossValidation(
-            defineModelColor, 
-            dataColor, 
-            labels, 
-            COLOR_IMAGE_BATCH_SIZE, 
-            COLOR_IMAGE_EPOCHS, 
-            COLOR_IMAGE_SPLITS, 
-            False
-        )
-    if GRAY_MODEL_STATUS:
-        # calculate cross validation of model
-        calculateCrossValidation(
-            defineModelGray, 
-            dataGray, 
-            labels, 
-            GRAY_IMAGE_BATCH_SIZE, 
-            GRAY_IMAGE_EPOCHS, 
-            GRAY_IMAGE_SPLITS, 
-            False
-        )
+# prepare data by splitting
+xTrain, xTest, yTrain, yTest = prepareData(data, labels, TRAIN_SIZE)
+# train model and plot results
+print("\n\nTraining model...")
+model, results = trainModel(model, xTrain, xTest, yTrain, yTest, BATCH_SIZE, EPOCHS, 0)
+plot(results)
+print('\n')
 
 
-print("\n\nTrain model:\n\n")
-
-
-if COLOR_MODEL_STATUS:
-    # prepare data by splitting
-    xTrainColor, xTestColor, yTrainColor, yTestColor = prepareData(dataColor, labels, COLOR_IMAGE_TRAIN_SIZE)
-    # train model and plot results
-    modelColor, results = trainModel(modelColor, xTrainColor, xTestColor, yTrainColor, yTestColor, COLOR_IMAGE_BATCH_SIZE, COLOR_IMAGE_EPOCHS, 0)
-    plot(results)
-if GRAY_MODEL_STATUS:
-    # prepare data by splitting
-    xTrainGray, xTestGray, yTrainGray, yTestGray = prepareData(dataGray, labels, GRAY_IMAGE_TRAIN_SIZE)
-    # train model and plot results
-    modelGray, results = trainModel(modelGray, xTrainGray, xTestGray, yTrainGray, yTestGray, GRAY_IMAGE_BATCH_SIZE, GRAY_IMAGE_EPOCHS, 0)
-    plot(results)
-
-
-print("\n\nPredict model:\n\n")
-
-
-if COLOR_MODEL_STATUS:
-    # output prediction results 
-    predictModel(modelColor, xTestColor, yTestColor)
-if GRAY_MODEL_STATUS:
-    # output prediction results 
-    predictModel(modelGray, xTestGray, yTestGray)
+# output prediction results 
+predictModel(model, xTest, yTest)
