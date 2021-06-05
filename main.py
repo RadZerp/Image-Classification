@@ -70,6 +70,7 @@ else:
 images = None
 masks = None
 labels = None
+data = None
 # branch if labels are cached, otherwise get labels
 if isCached(LABEL_FILENAME):
     labels = loadCachedData(LABEL_FILENAME)
