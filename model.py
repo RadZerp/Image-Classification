@@ -83,12 +83,12 @@ def plot(results):
     
     ax1.set_xlabel('Epochs')
     ax1.set_ylabel('Loss')
-    ax1.plot(epochs, loss_values, 'b', label = 'Training loss', c = 'lightgreen')
-    ax1.plot(epochs, val_loss_values, 'b', label = 'Validation loss')
+    ax1.plot(epochs, loss_values, label = 'Training loss', c = 'lightgreen')
+    ax1.plot(epochs, val_loss_values, label = 'Validation loss')
     
     ax2 = ax1.twinx()
     ax2.set_ylabel('Accuracy')
-    ax2.plot(epochs, val_accuracy, 'b', label = 'Validation accuracy', c = 'red')
+    ax2.plot(epochs, val_accuracy, label = 'Validation accuracy', c = 'red')
     plt.title('Training/validation loss and accuracy')
     
     fig.tight_layout()

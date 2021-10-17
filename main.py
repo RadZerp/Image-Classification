@@ -1,3 +1,6 @@
+# remove info and warnings outputted by tensorflow
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 # import local modules
 from dictionary import (
     LABEL_FILENAME,
@@ -40,11 +43,12 @@ from model import (
 from preprocessing import grayscaleConverter, resizeImages
 # import foreign modules
 import numpy as np
-from tensorflow import get_logger
-from logging import ERROR
+from tensorflow import config
 
-# remove warnings outputted by tensorflow during cross validation
-get_logger().setLevel(ERROR)
+gpu_devices = config.experimental.list_physical_devices('GPU')
+if gpu_devices:
+    for device in gpu_devices:
+        config.experimental.set_memory_growth(device, True)
 
 # set data according to model type
 if CONVERT_TO_GRAYSCALE:
