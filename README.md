@@ -1,5 +1,5 @@
 # Image-Classification
-PROG2051 Project - Autumn 2021
+Project for PROG2051 2021 Spring course
 
 Full report: [report.pdf](report.pdf)
 
