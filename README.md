@@ -1,6 +1,10 @@
 # Image-Classification
 PROG2051 Project - Autumn 2021
 
+Full report: [report.pdf](report.pdf)
+
+Dataset: http://www.josiahwang.com/dataset/leedsbutterfly/
+
 ### Usage
 - Clone repository to a local folder
 - Run main.py in your IDE of choice - we recommend VSCode or spyder
